@@ -18,21 +18,48 @@ namespace ClothingStore.Library.Models
         // the order id
         public int Id { get; set; }
 
+        public string StoreName
+        {
+            get => _sname;
+            set
+            {
+                CheckArgException(value);
+                _sname = value;
+            }
+        }
+
         // name of customer
         public string CustomerName
         {
             get => _customerName;
             set
             {
-                if (value.Length == 0)
-                {
-                    throw new ArgumentException("Customer name must not be empty", nameof(value));
-                }
+                CheckArgException(value);
                 _customerName = value;
             }
         }
 
         // order time when order was placed
         public DateTime OrderTime { get; set; }
+
+        // rule for credit card usage: usage of credit card is only for purchases of over 20$
+        public bool UseCreditCard
+        {
+            get
+            {
+                // fill in later
+                return true;
+            }
+        }
+
+        // instead of repeating myself, checking argument exception here
+        public static void CheckArgException(string val)
+        {
+            if (val.Length == 0)
+            {
+                // throws error if there wasn't an input 
+                throw new ArgumentException("String must not be empty.", nameof(val));
+            }
+        }
     }
 }

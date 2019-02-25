@@ -49,7 +49,7 @@ namespace ClothingStore.Library.Models
         public DateTime OrderTime { get; set; }
 
         // cannot place more than one order from the same location within two hours
-        // might need to work on this some more
+        // might need to work on this some more, need to make sure right location
         public bool WithinTwoHoursRule
         {
             get
@@ -57,6 +57,7 @@ namespace ClothingStore.Library.Models
                 if (OrderTime != null)
                 {
                     DateTime timeNow = DateTime.Now;
+                    // consider turning into minutes and dividing by 60. or possibly % 120
                     double timeLeft = (OrderTime - timeNow).TotalHours;
                     if (timeLeft < 2)
                     {
