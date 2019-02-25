@@ -4,7 +4,7 @@ using System.Text;
 
 namespace ClothingStore.Library.Models
 {
-    class Products
+    public class Products
     {
     }
 }

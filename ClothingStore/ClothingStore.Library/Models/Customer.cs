@@ -14,7 +14,9 @@ namespace ClothingStore.Library.Models
         // backing field for the name property
         private string _fname;
         private string _lname;
+        private string _sname;
 
+        // getting a customer's first name and last name
         public string FirstName
         {
             get => _fname;
@@ -34,13 +36,44 @@ namespace ClothingStore.Library.Models
             }
         }
 
+        public string StoreName
+        {
+            get => _sname;
+            set
+            {
+                CheckArgException(value);
+                _sname = value; 
+            }
+        }
+
+        public DateTime OrderTime { get; set; }
+
+        // cannot place more than one order from the same location within two hours
+        // might need to work on this some more
+        public bool WithinTwoHoursRule
+        {
+            get
+            {
+                if (OrderTime != null)
+                {
+                    DateTime timeNow = DateTime.Now;
+                    double timeLeft = (OrderTime - timeNow).TotalHours;
+                    if (timeLeft < 2)
+                    {
+                        return true;
+                    }
+                }
+                return false;
+            }
+        }
+
         // instead of repeating myself, checking argument exception here
         public static void CheckArgException(string val)
         {
             if (val.Length == 0)
             {
                 // throws error if there wasn't an input 
-                throw new ArgumentException("Name must not be empty.", nameof(val));
+                throw new ArgumentException("String must not be empty.", nameof(val));
             }
         }
     }
