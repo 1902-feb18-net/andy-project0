@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Text;
 
-namespace ClothingStore.Library.Models
+namespace ClothingStore.Lib
 {
     /// <summary>
     /// has first name, last name, etc.
@@ -15,6 +15,10 @@ namespace ClothingStore.Library.Models
         private string _fname;
         private string _lname;
         private string _sname;
+
+        //customer id
+        public int Id { get; set; }
+        public int DefaultStoreId { get; set; }
 
         // getting a customer's first name and last name
         public string FirstName

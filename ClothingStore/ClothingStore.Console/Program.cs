@@ -14,6 +14,13 @@ namespace ClothingStore.ConsoleApp
     {
         static void Main(string[] args)
         {
+            var optionsBuilder = new DbContextOptionsBuilder<CS.Project0Context>();
+            optionsBuilder.UseSqlServer(SecretConfiguration.ConnectionString);
+            var options = optionsBuilder.Options;
+
+            //var dbContext = new CS.Project0Context(options);
+            //IClothingStoreRepository clothingStoreRepository = new RC.ClothingStoreRepository(dbContext);
+
             Console.WriteLine("Welcome to the Clothing Store!");
             while(true)
             {

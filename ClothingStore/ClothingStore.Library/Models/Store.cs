@@ -3,7 +3,7 @@ using LinqStatistics;
 using System.Linq;
 using System.Collections.Generic;
 
-namespace ClothingStore.Library.Models
+namespace ClothingStore.Lib
 {
     /// <summary>
     /// a store's name, collection of orders

@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Text;
 
-namespace ClothingStore.Library.Models
+namespace ClothingStore.Lib
 {
     /// <summary>
     /// has a store location
@@ -16,7 +16,11 @@ namespace ClothingStore.Library.Models
         private string _sname;
 
         // the order id
-        public int Id { get; set; }
+        public int OrderId { get; set; }
+        public int StoreId { get; set; }
+        public int CustomerId { get; set; }
+        public decimal? Total { get; set; }
+        public DateTime DatePurchased { get; set; }
 
         public string StoreName
         {
