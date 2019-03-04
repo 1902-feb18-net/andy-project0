@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Text;
+using System.Linq;
 
 namespace ClothingStore.Context
 {
@@ -73,31 +74,57 @@ namespace ClothingStore.Context
         };
 
         // mapping Inventory with Inventory
+        public static Lib.Inventory Map(Inventory inventory) => new Lib.Inventory
+        {
+            StoreId = inventory.StoreId,
+            ItemId = inventory.ItemId,
+            ItemRemaining = inventory.ItemRemaining,
+            InventoryId = inventory.InventoryId
+
+        };
+
+        public static Inventory Map(Lib.Inventory inventory) => new Inventory
+        {
+            StoreId = inventory.StoreId,
+            ItemId = inventory.ItemId,
+            ItemRemaining = inventory.ItemRemaining,
+            InventoryId = inventory.InventoryId
+        };
 
         // mapping OrderList with orderList
-
-        public static Library.Review Map(Review review) => new Library.Review
+        public static Lib.OrderList Map(OrderList orderList) => new Lib.OrderList
         {
-            Id = review.Id,
-            ReviewerName = review.ReviewerName,
-            Score = review.Score,
-            Text = review.Text
+            OrderId = orderList.OrderId,
+            ItemId = orderList.ItemId,
+            ItemBought = orderList.ItemBought,
+            OrderListId = orderList.OrderListId
+
         };
 
-        public static Review Map(Library.Review review) => new Review
+        public static OrderList Map(Lib.OrderList orderList) => new OrderList
         {
-            Id = review.Id,
-            ReviewerName = review.ReviewerName,
-            Score = review.Score ?? throw new ArgumentException("review score cannot be null.", nameof(review)),
-            Text = review.Text
+            OrderId = orderList.OrderId,
+            ItemId = orderList.ItemId,
+            ItemBought = orderList.ItemBought,
+            OrderListId = orderList.OrderListId
         };
 
-        public static IEnumerable<Library.Restaurant> Map(IEnumerable<Restaurant> restaurants) => restaurants.Select(Map);
+        public static IEnumerable<Lib.Store> Map(IEnumerable<Location> stores) => stores.Select(Map);
+        public static IEnumerable<Location> Map(IEnumerable<Lib.Store> stores) => stores.Select(Map);
 
-        public static IEnumerable<Restaurant> Map(IEnumerable<Library.Restaurant> restaurants) => restaurants.Select(Map);
+        public static IEnumerable<Lib.Customer> Map(IEnumerable<Customer> customers) => customers.Select(Map);
+        public static IEnumerable<Customer> Map(IEnumerable<Lib.Customer> customers) => customers.Select(Map);
 
-        public static IEnumerable<Library.Review> Map(IEnumerable<Review> reviews) => reviews.Select(Map);
+        public static IEnumerable<Lib.Order> Map(IEnumerable<StoreOrder> orders) => orders.Select(Map);
+        public static IEnumerable<StoreOrder> Map(IEnumerable<Lib.Order> orders) => orders.Select(Map);
 
-        public static IEnumerable<Review> Map(IEnumerable<Library.Review> reviews) => reviews.Select(Map);
+        public static IEnumerable<Lib.Products> Map(IEnumerable<ItemProducts> items) => items.Select(Map);
+        public static IEnumerable<ItemProducts> Map(IEnumerable<Lib.Products> items) => items.Select(Map);
+
+        public static IEnumerable<Lib.Inventory> Map(IEnumerable<Inventory> inventories) => inventories.Select(Map);
+        public static IEnumerable<Inventory> Map(IEnumerable<Lib.Inventory> inventories) => inventories.Select(Map);
+
+        public static IEnumerable<Lib.OrderList> Map(IEnumerable<OrderList> orderLists) => orderLists.Select(Map);
+        public static IEnumerable<OrderList> Map(IEnumerable<Lib.OrderList> orderLists) => orderLists.Select(Map);
     }
 }
