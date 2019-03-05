@@ -7,15 +7,23 @@ using System.IO;
 using System.Linq;
 using System.Security;
 using CS = ClothingStore.Context;
+using Microsoft.Extensions.Logging;
+using Microsoft.Extensions.Logging.Console;
 
 namespace ClothingStore.ConsoleApp
 {
     class Program
     {
+        public static readonly LoggerFactory AppLoggerFactory =
+        #pragma warning disable CS0618 // Type or member is obsolete
+        new LoggerFactory(new[] { new ConsoleLoggerProvider((_, __) => true, true) });
+        #pragma warning restore CS0618 // Type or member is obsolete
+
         static void Main(string[] args)
         {
             var optionsBuilder = new DbContextOptionsBuilder<CS.Project0Context>();
             optionsBuilder.UseSqlServer(SecretConfiguration.ConnectionString);
+            optionsBuilder.UseLoggerFactory(AppLoggerFactory);
             var options = optionsBuilder.Options;
 
             //var dbContext = new CS.Project0Context(options);

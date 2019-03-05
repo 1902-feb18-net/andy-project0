@@ -16,7 +16,7 @@ namespace ClothingStore.Context
 
         public Store GetStoreById(int storeId)
         {
-            throw new NotImplementedException();
+            return Mapper.Map(_db.Location.Find(storeId));
         }
 
         public IEnumerable<Store> GetStores()
