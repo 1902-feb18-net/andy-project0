@@ -30,7 +30,8 @@ namespace ClothingStore.Lib
         }
 
         // all of the order purchases
-        public List<Order> Order { get; set; } = new List<Order>();
+        public List<Order> OrderList { get; set; } = new List<Order>();
+        public List<Inventory> InventoryList { get; set; } = new List<Inventory>();
 
 
 

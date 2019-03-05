@@ -52,25 +52,25 @@ namespace ClothingStore.Lib
 
         public DateTime OrderTime { get; set; }
 
-        // cannot place more than one order from the same location within two hours
-        // might need to work on this some more, need to make sure right location
-        public bool WithinTwoHoursRule
-        {
-            get
-            {
-                if (OrderTime != null)
-                {
-                    DateTime timeNow = DateTime.Now;
-                    // consider turning into minutes and dividing by 60. or possibly % 120
-                    double timeLeft = (OrderTime - timeNow).TotalHours;
-                    if (timeLeft < 2)
-                    {
-                        return true;
-                    }
-                }
-                return false;
-            }
-        }
+        //// cannot place more than one order from the same location within two hours
+        //// might need to work on this some more, need to make sure right location
+        //public bool WithinTwoHoursRule
+        //{
+        //    get
+        //    {
+        //        if (OrderTime != null)
+        //        {
+        //            DateTime timeNow = DateTime.Now;
+        //            // consider turning into minutes and dividing by 60. or possibly % 120
+        //            double timeLeft = (OrderTime - timeNow).TotalHours;
+        //            if (timeLeft < 2)
+        //            {
+        //                return true;
+        //            }
+        //        }
+        //        return false;
+        //    }
+        //}
 
         // instead of repeating myself, checking argument exception here
         public static void CheckArgException(string val)

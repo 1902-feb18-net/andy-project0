@@ -14,12 +14,27 @@ namespace ClothingStore.Lib
     {
         private string _customerName;
         private string _sname;
+        private decimal? _total;
 
         // the order id
         public int OrderId { get; set; }
         public int StoreId { get; set; }
         public int CustomerId { get; set; }
-        public decimal? Total { get; set; }
+        public List<OrderList> orderLists { get; set; } = new List<OrderList>();
+
+        public decimal? Total
+        {
+            get => _total;
+            set
+            {
+                if (value < 0)
+                {
+                    throw new ArgumentException($"Total ${value} must be 0 or above.",
+                        nameof(value));
+                }
+                _total = value;
+            }
+        }
         public DateTime DatePurchased { get; set; }
 
         public string StoreName
@@ -46,15 +61,15 @@ namespace ClothingStore.Lib
         // order time when order was placed
         public DateTime OrderTime { get; set; }
 
-        // rule for credit card usage: usage of credit card is only for purchases of over 20$
-        public bool UseCreditCard
-        {
-            get
-            {
-                // fill in later
-                return true;
-            }
-        }
+        //// rule for credit card usage: usage of credit card is only for purchases of over 20$
+        //public bool UseCreditCard
+        //{
+        //    get
+        //    {
+        //        // fill in later
+        //        return true;
+        //    }
+        //}
 
         // instead of repeating myself, checking argument exception here
         public static void CheckArgException(string val)

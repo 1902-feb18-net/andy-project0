@@ -10,5 +10,6 @@ namespace ClothingStore.Lib
         public int ItemId { get; set; }
         public int ItemRemaining { get; set; }
         public int InventoryId { get; set; }
+        public ICollection<Products> productDetail { get; set; } 
     }
 }
