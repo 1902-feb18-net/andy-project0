@@ -17,6 +17,7 @@ namespace ClothingStore.Lib
         void DisplayOrderDetails(int orderId);
         void Save();
         Order GetOrderByOrderId(int orderId);
+        int lastId();
     
     }
 }

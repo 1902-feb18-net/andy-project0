@@ -139,7 +139,7 @@ namespace ClothingStore.ConsoleApp
                             string storeIdString = $"{i}: {sl.Id}";
                             string storeNameString = $"{i}: {sl.Name}";
                             Console.WriteLine(storeIdString + " ");
-                            Console.WriteLine(storeNameString + " ");
+                            Console.WriteLine(storeNameString);
                         }
 
                         // getting user input again
@@ -159,6 +159,57 @@ namespace ClothingStore.ConsoleApp
                         // -----------------
                         // display available products
                         Console.WriteLine("Here are the available products");
+                        List<CL.Products> productsList = productRepository.GetProducts().ToList();
+                        for (int i = 1; i < productsList.Count + 1; i++)
+                        {
+                            CL.Products pl = productsList[i - 1];
+                            string productIdString = $"{i}: {pl.ItemId}";
+                            string productNameString = $"{i}: {pl.ItemName}";
+                            Console.WriteLine(productIdString + " ");
+                            Console.WriteLine(productNameString);
+                        }
+
+                        // now for user to decide if they want to add an item to their order
+                        Console.WriteLine("Do you want to buy anything? (y)es or (n)o?");
+                        string addProduct = Console.ReadLine();
+                        while (!(addProduct.ToLower() == "y" || addProduct.ToLower() == "n"))
+                        {
+                            Console.WriteLine("not an available option, type in 'y' or 'n'");
+                            addProduct = Console.ReadLine();
+                        }
+
+                        // adding products to order
+                        if(addProduct.ToLower() == "y")
+                        {
+                            while(addProduct.ToLower() == "y")
+                            {
+                                Console.WriteLine("please type the Product id of the product you would like to add to your order.");
+                                string productChoice = Console.ReadLine();
+                                bool parseProduct = Int32.TryParse(productChoice, out int productChoiceInt);
+                                while (parseProduct == false || (parseProduct == true && productChoiceInt > productsList.Count))
+                                {
+                                    Console.WriteLine("Not valid input, please enter a valid product ID of product you would like to your order");
+                                    productChoice = Console.ReadLine();
+                                    parseProduct = Int32.TryParse(productChoice, out productChoiceInt);
+                                }
+                                CL.Products productToBeAdded = productRepository.GetProductsById(productChoiceInt);
+                                newOrder.AddOrder(productToBeAdded);
+
+                                // enable as much product adding as you want
+                                Console.WriteLine("Would you like to add another product to your order? Type (y)es or (n)o?");
+                                addProduct = Console.ReadLine();
+                                while (!(addProduct.ToLower() == "y" || addProduct.ToLower() == "n"))
+                                {
+                                    Console.WriteLine("not an available option, type in 'y' or 'n'");
+                                    addProduct = Console.ReadLine();
+                                }
+                            }
+
+                            // insert, save, display order
+                            orderRepository.InsertOrder(newOrder);
+                            orderRepository.Save();
+                            orderRepository.DisplayOrderDetails(orderRepository.lastId());
+                        }
                     }
                         
                 }

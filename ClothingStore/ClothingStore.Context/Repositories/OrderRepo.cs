@@ -105,7 +105,14 @@ namespace ClothingStore.Context
 
         public void InsertOrder(Order order)
         {
+            _db.StoreOrder.Include(o => o.OrderList);
             _db.Add(Mapper.Map(order));
+        }
+
+        public int lastId()
+        {
+            Order x = Mapper.Map(_db.StoreOrder.OrderByDescending(o => o.OrderId).First());
+            return x.OrderId;
         }
 
         public void Save()
