@@ -20,7 +20,6 @@ namespace ClothingStore.Lib
         public int OrderId { get; set; }
         public int StoreId { get; set; }
         public int CustomerId { get; set; }
-        public List<OrderList> orderLists { get; set; } = new List<OrderList>();
 
         public decimal? Total
         {
@@ -61,15 +60,47 @@ namespace ClothingStore.Lib
         // order time when order was placed
         public DateTime OrderTime { get; set; }
 
-        //// rule for credit card usage: usage of credit card is only for purchases of over 20$
-        //public bool UseCreditCard
-        //{
-        //    get
-        //    {
-        //        // fill in later
-        //        return true;
-        //    }
-        //}
+        public List<OrderList> orderLists { get; set; } = new List<OrderList>();
+        public List<Products> products { get; set; } = new List<Products>();
+
+        // rule for credit card usage: usage of credit card is only for purchases of over 20$
+        // only shirt is the only item under 20
+        public void AboveTwenty(Products product)
+        {
+            if(orderLists.Count < 2)
+            {
+                this.products.Add(product);
+                this.Total += product.ItemPrice;
+
+                if(Total < 20)
+                {
+                    Console.WriteLine("You need to buy 20$ or more in this store (assumption that only credit card is allowed)");
+                    this.products.Remove(product);
+                    this.Total -= product.ItemPrice;
+                }
+                else
+                {
+                    bool insert = true;
+                    foreach (var item in orderLists)
+                    {
+                        if (item.ItemId == product.ItemId)
+                        {
+                            insert = false;
+                            item.ItemBought++;
+                        }
+                    }
+                    if(insert == true)
+                    {
+                        orderLists.Add(new OrderList() { ItemId = product.ItemId, ItemBought = 1 });
+                    }
+                }
+                Console.WriteLine("product added to order");
+            }
+            else
+            {
+                Console.WriteLine("Sorry, but you did not purchase enough to use your credit card. Product not added");
+            }
+        }
 
         // instead of repeating myself, checking argument exception here
         public static void CheckArgException(string val)

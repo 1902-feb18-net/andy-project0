@@ -5,7 +5,7 @@ using ClothingStore.Lib;
 using Microsoft.EntityFrameworkCore;
 using System.Linq;
 
-namespace ClothingStore.Context.Repositories
+namespace ClothingStore.Context
 {
     public class CustomerRepo : ICustomerRepo, IDisposable
     {
@@ -39,10 +39,10 @@ namespace ClothingStore.Context.Repositories
             _db.Entry(_db.Customer.Find(customer.Id)).CurrentValues.SetValues(Mapper.Map(customer));
         }
 
-        public void DeleteCustomer(int customerId)
-        {
-            _db.Remove(_db.Customer.Find(customerId));
-        }
+        //public void DeleteCustomer(int customerId)
+        //{
+        //    _db.Remove(_db.Customer.Find(customerId));
+        //}
 
 
         public void Save()

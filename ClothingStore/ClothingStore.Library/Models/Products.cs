@@ -27,6 +27,8 @@ namespace ClothingStore.Lib
                 _price = value;
             }
         }
+        
+        public ICollection<OrderList> orderList { get; set; }
 
     }
 }

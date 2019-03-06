@@ -12,7 +12,7 @@ namespace ClothingStore.Lib
         IEnumerable<Order> DisplayOrderHistoryCustomer(int customer);
         IEnumerable<Order> DisplayOrderHistory(string sortOrder);
         void InsertOrder(Order order);
-        void DeleteOrder(int orderId);
+        //void DeleteOrder(int orderId);
         void UpdateOrder(Order order);
         void DisplayOrderDetails(int orderId);
         void Save();

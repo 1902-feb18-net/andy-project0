@@ -8,7 +8,7 @@ namespace ClothingStore.Testing
     public class StoreTests
     {
         // the test class is instantiated again for each test, so it is safe to put common setup code
-        // in the class constructor or members. this will be a new restaurant object for each test.
+        // in the class constructor or members. this will be a new store object for each test.
         // it's made readonly to satisfy static analysis warnings.
         readonly Store store = new Store();
 
@@ -25,5 +25,8 @@ namespace ClothingStore.Testing
         {
             Assert.ThrowsAny<ArgumentException>(() => store.Name = string.Empty);
         }
+
+        //public List<Order> OrderList { get; set; } = new List<Order>();
+        //public List<Inventory> InventoryList { get; set; } = new List<Inventory>();
     }
 }

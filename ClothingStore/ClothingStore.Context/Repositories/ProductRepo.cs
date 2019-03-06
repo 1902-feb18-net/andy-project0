@@ -23,7 +23,8 @@ namespace ClothingStore.Context
 
         public Products GetProductsById(int productId)
         {
-            return Mapper.Map(_db.ItemProducts.Find(productId));
+            IEnumerable<Products> productCollection = Mapper.Map(_db.ItemProducts);
+            return productCollection.Where(p => p.ItemId == productId).First();
         }
 
         public void Save()
