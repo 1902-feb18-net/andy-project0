@@ -93,8 +93,47 @@ namespace ClothingStore.ConsoleApp
                     // was thinking of using a switch, but let's get ugly instead
                     if (input == "1")
                     {
-                        //List<CL.Order> orderSuggestions = orderRepository.DisplayOrderHistoryCustomer(signedIn.Id)
+                        List<CL.Order> orderSuggestions = orderRepository.DisplayOrderHistoryCustomer(signedIn.Id).
+                            OrderByDescending(o => o.OrderTime).ToList();
+                        CL.Order orderSuggest = orderSuggestions[0];
+
+                        Console.WriteLine("Would you like to view you orders?");
+                        Console.WriteLine("(y)es or (n)o?");
+                        var viewOrders = Console.ReadLine();
+                        if (viewOrders.ToLower() == "y")
+                        {
+                            // let's list out some of the orders
+                            // add in a readLine option for this later
+                            Console.WriteLine("Here is your most recent order on record:");
+                            string orderSuggestStoreId = $"Store Id: {orderSuggest.StoreId}";
+                            string orderSuggestId = $"Order Id: {orderSuggest.OrderId}";
+                            string orderSuggestTotal = $"Total Cost: {orderSuggest.Total}";
+                            Console.WriteLine(orderSuggestId);
+                            Console.Write("Items ");
+
+                            List<Products> printProductList = orderRepository.GetProductsOfOrders(orderSuggest.OrderId).ToList();
+                            foreach (var item in printProductList)
+                            {
+                                // didn't include the number of items bought from each yet
+                                Console.Write($"{item.ItemName}");
+                            }
+                            Console.WriteLine(orderSuggestTotal);
+                            Console.WriteLine(orderSuggestStoreId);
+                        }
+
+                        Console.WriteLine("Alright, let's start ordering");
+                        //initializing new order
+                        CL.Order newOrder = new CL.Order();
+                        newOrder.StoreId = orderSuggest.StoreId;
+                        newOrder.CustomerId = orderSuggest.CustomerId;
+                        newOrder.Total = 0;
+                        newOrder.DatePurchased = DateTime.Now;
+                        newOrder.OrderId = orderSuggest.OrderId;
+
+                        //display available stores
+                        
                     }
+                        
                 }
    
                 

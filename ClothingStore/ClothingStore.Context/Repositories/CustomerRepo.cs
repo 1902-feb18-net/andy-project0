@@ -18,7 +18,7 @@ namespace ClothingStore.Context
 
         public IEnumerable<Lib.Customer> GetCustomerByName(string fName, string lName)
         {
-            return Mapper.Map(_db.Customer.Where(c => c.FirstName == fName && c.LastName == lName));
+            return Mapper.Map(_db.Customer.Where(c => c.FirstName.ToLower() == fName && c.LastName.ToLower() == lName));
         }
 
         public IEnumerable<Lib.Customer> GetCustomers()
