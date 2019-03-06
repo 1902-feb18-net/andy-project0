@@ -27,18 +27,21 @@ namespace ClothingStore.ConsoleApp
             var optionsBuilder = new DbContextOptionsBuilder<CS.Project0Context>();
             optionsBuilder.UseSqlServer(SecretConfiguration.ConnectionString);
 
+            //let's debug conflicting key values
+            optionsBuilder.EnableSensitiveDataLogging();
+
             // uncomment this if you want to use the logger
             //optionsBuilder.UseLoggerFactory(AppLoggerFactory);
             var options = optionsBuilder.Options;
 
             var dbcontext = new CS.Project0Context(options);
 
-            //IClothingStoreRepo clothingStoreRepo = new CS.StoreRepo(dbcontext);
             // create repos to use
             CustomerRepo customerRepository = new CustomerRepo(dbcontext);
             OrderRepo orderRepository = new OrderRepo(dbcontext);
             ProductRepo productRepository = new ProductRepo(dbcontext);
             StoreRepo storeRepository = new StoreRepo(dbcontext);
+
             List<CL.Customer> customerList = customerRepository.GetCustomers().ToList();
             List<CL.Store> storeList = storeRepository.GetStores().ToList();
 
@@ -154,7 +157,7 @@ namespace ClothingStore.ConsoleApp
                         }
 
                         // adding your choice to order
-                        newOrder.StoreId = Int32.Parse(storeChoice);
+                        newOrder.StoreId = storeChoiceInt;
 
                         // -----------------
                         // display available products
@@ -211,9 +214,119 @@ namespace ClothingStore.ConsoleApp
                             orderRepository.DisplayOrderDetails(orderRepository.lastId());
                         }
                     }
+                    else if (input == "2")
+                    {
+                        Console.WriteLine("Looking up a order history");
+                        Console.WriteLine("How do you want to look up orders?");
+                        Console.WriteLine("1 : location");
+                        Console.WriteLine("2 : user");
+                        Console.WriteLine("3 : sort all");
+                        string lookChoice = Console.ReadLine();
+                        while (!(lookChoice.ToLower() == "1" || lookChoice.ToLower() == "2" || lookChoice.ToLower() == "3" || lookChoice.ToLower() == "q"))
+                        {
+                            Console.WriteLine("Not a valid choice. Please type either '1', '2', '3' or 'q'.");
+                            Console.WriteLine("How do you want to look up orders?");
+                            Console.WriteLine("1 : location");
+                            Console.WriteLine("2 : user");
+                            Console.WriteLine("3 : sort all");
+                            lookChoice = Console.ReadLine();
+                        }
+                        if (lookChoice.ToLower() == "1")
+                        {
+                            Console.WriteLine("Please provide a store Id");
+                            Console.Write("Store Id: ");
+                            string storeIdInput = Console.ReadLine();
+                            bool parseSuccess = Int32.TryParse(storeIdInput, out int storeIdLookInt);
+                            while (parseSuccess == false)
+                            {
+                                Console.WriteLine("Not a valid choice. Please enter a valid Store ID.");
+                                Console.Write("Store ID: ");
+                                lookChoice = Console.ReadLine();
+                                parseSuccess = Int32.TryParse(storeIdInput, out storeIdLookInt);
+                            }
+                            List<Order> orderHistory = orderRepository.DisplayOrderHistoryStore(storeIdLookInt).ToList();
+                            for (int i = 1; i < orderHistory.Count() + 1; i++)
+                            {
+                                Order orderhistory = orderHistory[i - 1];
+                                string orderIdString = $"{i}: {orderhistory.OrderId}";
+                                string orderStoreString = $"{i}: {orderhistory.StoreId}";
+                                string orderTotalString = $"{i}: {orderhistory.Total}";
+                                string orderDateTimeString = $"{i}: {orderhistory.DatePurchased}";
+                                Console.Write(orderIdString + " ");
+                                Console.Write(orderStoreString + " ");
+                                Console.Write(orderTotalString + " ");
+                                Console.Write(orderDateTimeString + " ");
+                                Console.WriteLine();
+
+                            }
+                        }
+                        else if (lookChoice.ToLower() == "2")
+                        {
+                            Console.WriteLine("Provide Customer Id");
+                            string userIdLookUp = Console.ReadLine();
+                            bool parseSuccess = Int32.TryParse(userIdLookUp, out int userIdLookUpInt);
+                            while (parseSuccess == false)
+                            {
+                                Console.WriteLine("Not a valid choice. Please enter a valid Customer ID.");
+                                Console.Write("Customer ID: ");
+                                userIdLookUp = Console.ReadLine();
+                                parseSuccess = Int32.TryParse(userIdLookUp, out userIdLookUpInt);
+                            }
+                            List<Order> orderHistory = orderRepository.DisplayOrderHistoryCustomer(userIdLookUpInt).ToList();
+                            for (int i = 1; i < orderHistory.Count() + 1; i++)
+                            {
+                                Order orderhistory = orderHistory[i - 1];
+                                string orderIdString = $"{i}: {orderhistory.OrderId}";
+                                string orderStoreString = $"{i}: {orderhistory.StoreId}";
+                                string orderTotalString = $"{i}: {orderhistory.Total}";
+                                string orderDateTimeString = $"{i}: {orderhistory.DatePurchased}";
+                                Console.Write(orderIdString + " ");
+                                Console.Write(orderStoreString + " ");
+                                Console.Write(orderTotalString + " ");
+                                Console.Write(orderDateTimeString + " ");
+                                Console.WriteLine();
+
+                            }
+                        }
+                        else if (lookChoice.ToLower() == "3")
+                        {
+                            Console.WriteLine("Choose one of the below options to sort");
+                            Console.WriteLine("e : earliest first");
+                            Console.WriteLine("l : latest first");
+                            Console.WriteLine("c : cheapest first");
+                            Console.WriteLine("x : expensive first");
+
+                            string sortChoice = Console.ReadLine();
+                            while (!(sortChoice.ToLower() == "e" || sortChoice.ToLower() == "l" || sortChoice.ToLower() == "c" || sortChoice.ToLower() == "x"))
+                            {
+                                Console.WriteLine("Invalid choice. Please type either 'e', 'l' 'c', or 'x'.");
+                                Console.WriteLine("Choose one of the below options to sort");
+                                Console.WriteLine("e : earliest first");
+                                Console.WriteLine("l : latest first");
+                                Console.WriteLine("c : cheapest first");
+                                Console.WriteLine("x : expensive first");
+                                sortChoice = Console.ReadLine();
+                            }
+                            List<Order> collectionOrders = orderRepository.DisplayOrderHistory(sortChoice).ToList();
+                            foreach (var item in collectionOrders)
+                            {
+                                Console.Write($"Order Id: {item.OrderId}");
+                                Console.Write($"User Id: {item.CustomerId}");
+                                Console.Write($"Store Id: {item.StoreId}");
+                                Console.Write($"Total Cost: {item.Total}");
+                                Console.Write($"Date time; {item.OrderTime}");
+                                Console.WriteLine();
+
+                            }
+
+
+                        } else if (lookChoice == "3")
+                        {
+                            innerLoop = false;
+                        }
+                    }
                         
                 }
-   
                 
             }
         }

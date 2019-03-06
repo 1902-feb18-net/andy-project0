@@ -87,7 +87,7 @@ namespace ClothingStore.Context
 
         public IEnumerable<Order> GetOrders()
         {
-            return Mapper.Map(_db.StoreOrder);
+            return Mapper.Map(_db.StoreOrder.AsNoTracking());
         }
 
         public IEnumerable<Products> GetProductsOfOrders(int OrderId)
@@ -111,13 +111,14 @@ namespace ClothingStore.Context
 
         public int lastId()
         {
-            Order x = Mapper.Map(_db.StoreOrder.OrderByDescending(o => o.OrderId).First());
+            Order x = Mapper.Map(_db.StoreOrder.OrderByDescending(o => o.OrderId).AsNoTracking().First());
             return x.OrderId;
         }
 
         public void Save()
         {
             _db.SaveChanges();
+            Console.WriteLine("Order was saved");
         }
 
         public void UpdateOrder(Order order)
