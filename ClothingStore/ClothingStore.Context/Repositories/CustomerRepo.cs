@@ -39,12 +39,6 @@ namespace ClothingStore.Context
             _db.Entry(_db.Customer.Find(customer.Id)).CurrentValues.SetValues(Mapper.Map(customer));
         }
 
-        //public void DeleteCustomer(int customerId)
-        //{
-        //    _db.Remove(_db.Customer.Find(customerId));
-        //}
-
-
         public void Save()
         {
             _db.SaveChanges();

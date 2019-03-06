@@ -3,10 +3,12 @@ using System.Collections.Generic;
 using Microsoft.EntityFrameworkCore;
 using ClothingStore.Library;
 using ClothingStore.Lib;
+using CL = ClothingStore.Lib;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Security;
+using ClothingStore.Context;
 using CS = ClothingStore.Context;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Logging.Console;
@@ -24,14 +26,32 @@ namespace ClothingStore.ConsoleApp
         {
             var optionsBuilder = new DbContextOptionsBuilder<CS.Project0Context>();
             optionsBuilder.UseSqlServer(SecretConfiguration.ConnectionString);
-            optionsBuilder.UseLoggerFactory(AppLoggerFactory);
+            // uncomment this if you want to use the logger
+            //optionsBuilder.UseLoggerFactory(AppLoggerFactory);
             var options = optionsBuilder.Options;
 
             var dbcontext = new CS.Project0Context(options);
-            IClothingStoreRepo clothingStoreRepo = new CS.StoreRepo(dbcontext);
+
+            //IClothingStoreRepo clothingStoreRepo = new CS.StoreRepo(dbcontext);
+            // create repos to use
+            CustomerRepo customerRepository = new CustomerRepo(dbcontext);
+            OrderRepo orderRepository = new OrderRepo(dbcontext);
+            ProductRepo productRepository = new ProductRepo(dbcontext);
+            StoreRepo storeRepository = new StoreRepo(dbcontext);
+            List<CL.Customer> customerList = customerRepository.GetCustomers().ToList();
+            List<CL.Store> storeList = storeRepository.GetStores().ToList();
+
+            Console.WriteLine(storeList);
+            Console.WriteLine("Current stores to shop from");
+            foreach(Store store in storeList)
+            {
+                Console.WriteLine($" {store.Name}");
+            }
 
             Console.WriteLine("Welcome to the Clothing Store!");
-            while(true)
+
+            bool loop = true;
+            while(loop == true)
             {
 
                 PrintInstructions();
@@ -46,7 +66,7 @@ namespace ClothingStore.ConsoleApp
                 {
                     case "r":
                         Console.WriteLine("Here is a list of stores.");
-                        CaseR(clothingStoreRepo);
+                        //CaseR(clothingStoreRepo);
                         break;
                     case "a":
                         Console.WriteLine("Type in a your first name, last name, and default store");
@@ -73,10 +93,8 @@ namespace ClothingStore.ConsoleApp
         static void PrintInstructions()
         {
             Console.WriteLine();
-            Console.WriteLine("r:\tDisplay Store Locations.");
-            Console.WriteLine("a:\tAdd new Customer.");
-            Console.WriteLine("s:\tSave data to disk.");
-            Console.WriteLine("l:\tLoad data from disk.");
+            Console.WriteLine("1:\tDisplay Store Locations.");
+            Console.WriteLine("2:\tAdd new Customer.");
             Console.WriteLine();
             Console.Write("Enter valid menu option, or \"q\" to quit: ");
         }
