@@ -26,6 +26,7 @@ namespace ClothingStore.ConsoleApp
         {
             var optionsBuilder = new DbContextOptionsBuilder<CS.Project0Context>();
             optionsBuilder.UseSqlServer(SecretConfiguration.ConnectionString);
+
             // uncomment this if you want to use the logger
             //optionsBuilder.UseLoggerFactory(AppLoggerFactory);
             var options = optionsBuilder.Options;
@@ -53,56 +54,75 @@ namespace ClothingStore.ConsoleApp
             bool loop = true;
             while(loop == true)
             {
-
-                PrintInstructions();
-
-                // 1. can view stores and select
-                // 2. can add new customer with: fname, lname, defaultStore
-                // 3. can search for customer and select customer to use
-                // 4. Quit app
-                
-                var input = Console.ReadLine();
-                switch(input)
+                for(int i = 1; i < customerList.Count + 1; i++)
                 {
-                    case "r":
-                        Console.WriteLine("Here is a list of stores.");
-                        //CaseR(clothingStoreRepo);
-                        break;
-                    case "a":
-                        Console.WriteLine("Type in a your first name, last name, and default store");
-                        Test();
-                        break;
-                    case "s":
-                        Console.WriteLine("enter in a customer name then select the correct customer");
-                        break;
-                    case "q":
-                        Console.WriteLine("Bye! Please come again!");
-                        break;
-                    default:
-                        Console.WriteLine("\n[Please enter a valid command]");
-                        break;
+                    CL.Customer cList = customerList[i - 1];
+                    string userFirstNameString = $"{i}: \"{cList.FirstName}\"";
+                    string userLastNameString = $"\"{cList.LastName}\"";
+                    Console.Write(userFirstNameString + " ");
+                    Console.Write(userLastNameString);
+                    Console.WriteLine();
                 }
-                if (input == "q")
+
+                Console.WriteLine("Please sign in, or 'q' to quit");
+                Console.Write("First Name: ");
+                
+                string fName = Console.ReadLine();
+                fName = checkIfInt(fName);
+                Console.Write("Last Name: ");
+                string lName = Console.ReadLine();
+                lName = checkIfInt(lName);
+                
+                // check to see if user typed in q to quit
+                if(fName.ToLower() == "q" || lName.ToLower() == "q")
                 {
                     break;
                 }
+
+                List<CL.Customer> signedInUser = customerRepository.GetCustomerByName(fName, lName).ToList();
+                CL.Customer signedIn = signedInUser[0];
+                Console.WriteLine("SIGNED IN!!!" + signedIn);
+
+                bool innerLoop = true;
+                // loopception!
+                while (innerLoop == true)
+                {
+                    PrintInstructions1();
+                    var input = Console.ReadLine();
+
+                    // was thinking of using a switch, but let's get ugly instead
+                    if (input == "1")
+                    {
+                        //List<CL.Order> orderSuggestions = orderRepository.DisplayOrderHistoryCustomer(signedIn.Id)
+                    }
+                }
+   
                 
             }
         }
 
-        static void PrintInstructions()
+        static void PrintInstructions1()
         {
-            Console.WriteLine();
-            Console.WriteLine("1:\tDisplay Store Locations.");
-            Console.WriteLine("2:\tAdd new Customer.");
-            Console.WriteLine();
-            Console.Write("Enter valid menu option, or \"q\" to quit: ");
+            Console.WriteLine("Here are your options:");
+            Console.WriteLine("1:\tPlace an order.");
+            Console.WriteLine("2:\tDisplay order history.");
+            Console.WriteLine("3:\tGo back to login screen");
         }
 
         // let's test something quick here
-        static void Test()
+        static string checkIfInt(string name)
         {
-            Console.WriteLine("We are using Test");
+            string nameInput = name;
+            while (nameInput.Any(Char.IsDigit))
+            {
+                Console.WriteLine("No numbers in input allowed");
+                nameInput = Console.ReadLine();             
+            }
+            if (nameInput.ToLower() == "q")
+            {
+                Environment.Exit(0);
+            }
+            return nameInput;
         }
 
         static void CaseR(IClothingStoreRepo storeRepo)
