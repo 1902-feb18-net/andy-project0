@@ -81,7 +81,7 @@ namespace ClothingStore.ConsoleApp
 
                 List<CL.Customer> signedInUser = customerRepository.GetCustomerByName(fName, lName).ToList();
                 CL.Customer signedIn = signedInUser[0];
-                Console.WriteLine("SIGNED IN!!!" + signedIn);
+                Console.WriteLine($"{fName} {lName} signed in");
 
                 bool innerLoop = true;
                 // loopception!
@@ -131,7 +131,34 @@ namespace ClothingStore.ConsoleApp
                         newOrder.OrderId = orderSuggest.OrderId;
 
                         //display available stores
-                        
+                        Console.WriteLine("Available stores");
+                        List<CL.Store> storesList = storeRepository.GetStores().ToList();
+                        for (int i = 1; i < storesList.Count() + 1; i++)
+                        {
+                            CL.Store sl = storesList[i - 1];
+                            string storeIdString = $"{i}: {sl.Id}";
+                            string storeNameString = $"{i}: {sl.Name}";
+                            Console.WriteLine(storeIdString + " ");
+                            Console.WriteLine(storeNameString + " ");
+                        }
+
+                        // getting user input again
+                        Console.WriteLine("Please enter in the number for the store you wish to shop at");
+                        string storeChoice = Console.ReadLine();
+                        bool parseStore = Int32.TryParse(storeChoice, out int storeChoiceInt);
+                        while (parseStore == false || (parseStore == true && storeChoiceInt > storesList.Count))
+                        {
+                            Console.WriteLine("Not valid input, please enter in the number for the store you wish to shop at");
+                            storeChoice = Console.ReadLine();
+                            parseStore = Int32.TryParse(storeChoice, out storeChoiceInt);
+                        }
+
+                        // adding your choice to order
+                        newOrder.StoreId = Int32.Parse(storeChoice);
+
+                        // -----------------
+                        // display available products
+                        Console.WriteLine("Here are the available products");
                     }
                         
                 }
